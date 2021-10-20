@@ -1,0 +1,26 @@
+version: '2'
+services:
+  trails-manager:
+    container_name: trails-manager
+    image: docker.io/library/trails-manager:0.0.1-SNAPSHOT
+    ports:
+      - '8080:8080'
+    depends_on:
+      - "postgres"
+  postgres:
+    image: postgres:14.0
+    restart: always
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_db=trails-manager
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./db:/docker-entrypoint-initdb.d/
